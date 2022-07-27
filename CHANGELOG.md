@@ -1,3 +1,9 @@
+## 4.0.2 2022-07-27 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Properly read defaults
+
+
 ## 4.0.1 2022-07-27 <dave at tiredofit dot ca>
 
    ### Added
