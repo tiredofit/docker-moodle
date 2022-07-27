@@ -1,0 +1,6 @@
+source /assets/functions/00-container
+
+CRON_PERIOD=${CRON_PERIOD:-"15"}
+DATA_PATH=${DATA_PATH:-"/www/data/"}
+ENABLE_REVERSE_PROXY=${ENABLE_REVERSE_PROXY:-"TRUE"}
+LANGUAGE=${LANGUAGE:-"en"}

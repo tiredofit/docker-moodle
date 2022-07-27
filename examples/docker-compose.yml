@@ -1,0 +1,82 @@
+version: '2.4'
+
+services:
+  moodle-app:
+    image: tiredofit/moodle:latest
+    container_name: moodle-app
+    links:
+      - moodle-db
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.moodle.rule=Host(`moodle.example.com`)
+      - traefik.http.services.moodle.loadbalancer.server.port=80
+    volumes:
+      - ./data/:/www/data
+      - ./www/:/www/moodle
+      - ./logs/:/www/logs
+    environment:
+      - TIMEZONE=America/Vancouver
+      - CONTAINER_NAME=moodle.hostname.com
+
+      - DB_HOST=moodle-db
+      - DB_NAME=moodle
+      - DB_USER=moodle
+      - DB_PASS=userpassword
+
+## First time installation only
+      - ADMIN_USER=admin
+      - ADMIN_EMAIL=admin@example.domain.name
+      - ADMIN_PASS=admin_password
+      - SITE_URL=https://moodle.example.com
+      - SITE_NAME=example_site_name
+      - SITE_SHORT_NAME=example_site_short_name
+##
+    networks:
+      - proxy
+      - services
+    restart: always
+
+  moodle-db:
+    image: tiredofit/mariadb
+    container_name: moodle-db
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - TIMEZONE=America/Vancouver
+      - CONTAINER_NAME=moodle-db
+
+      - ROOT_PASS=password
+      - DB_NAME=moodle
+      - DB_USER=moodle
+      - DB_PASS=userpassword
+    networks:
+      - services
+    restart: always
+
+  moodle-db-backup:
+    container_name: moodle-db-backup
+    image: tiredofit/db-backup
+    links:
+     - moodle-db
+    volumes:
+      - ./dbbackup:/backup
+    environment:
+      - TIMEZONE=America/Vancouver
+      - CONTAINER_NAME=moodle-db-backup
+      - DB_HOST=moodle-db
+      - DB_TYPE=mariadb
+      - DB_NAME=moodle
+      - DB_USER=moodle
+      - DB_PASS=userpassword
+      - DB_DUMP_FREQ=1440
+      - DB_DUMP_BEGIN=0000
+      - DB_CLEANUP_TIME=8640
+    networks:
+      - services
+    restart: always
+
+networks:
+  proxy:
+    external: true
+  services:
+    external: true
