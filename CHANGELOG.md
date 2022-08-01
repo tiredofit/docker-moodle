@@ -1,3 +1,9 @@
+## 4.0.3 2022-08-01 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Drop cron period to 1 minute
+
+
 ## 4.0.2 2022-07-27 <dave at tiredofit dot ca>
 
    ### Changed
