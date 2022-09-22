@@ -1,3 +1,9 @@
+## 4.0.8 2022-09-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add PHP Modules for: SOAP, Sodium, XMLRPC, ZIP as per Server environment check page
+
+
 ## 4.0.7 2022-09-22 <dave at tiredofit dot ca>
 
    ### Changed

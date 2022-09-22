@@ -5,6 +5,10 @@ ARG MOODLE_VERSION
 ENV MOODLE_VERSION=${MOODLE_VERSION:-"3.11"} \
     NGINX_WEBROOT="/www/moodle" \
     NGINX_SITE_ENABLED="moodle" \
+    PHP_ENABKE_SOAP=TRUE \
+    PHP_ENABLE_SODIUM=TRUE \
+    PHP_ENABLE_XMLRPC=TRUE \
+    PHP_ENABLE_ZIP=TRUE \
     IMAGE_NAME="tiredofit/moodle" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-moodle"
 
