@@ -11,7 +11,7 @@ ENV MOODLE_VERSION=${MOODLE_VERSION:-"3.11"} \
 RUN set -x && \
     apk update && \
     apk upgrade && \
-    apk add -t .moodle-run-deps
+    apk add -t .moodle-run-deps \
                 aspell \
                 email \
                 git \

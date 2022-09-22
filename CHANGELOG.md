@@ -1,3 +1,9 @@
+## 4.0.6 2022-09-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Fix Dockerfile build
+
+
 ## 4.0.5 2022-09-22 <dave at tiredofit dot ca>
 
    ### Added
