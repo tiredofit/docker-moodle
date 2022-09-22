@@ -1,3 +1,9 @@
+## 4.0.9 2022-09-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Remove extra curly brace
+
+
 ## 4.0.8 2022-09-22 <dave at tiredofit dot ca>
 
    ### Added

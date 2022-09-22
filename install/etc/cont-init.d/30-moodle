@@ -85,6 +85,5 @@ function moosh() {
       cd "\${oldpwd}"
 }
 EOF
-}
 
 liftoff
