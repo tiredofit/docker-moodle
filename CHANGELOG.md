@@ -1,3 +1,9 @@
+## 4.0.7 2022-09-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Update nginx configuration as per https://docs.moodle.org/34/en/Nginx#Nginx
+
+
 ## 4.0.6 2022-09-22 <dave at tiredofit dot ca>
 
    ### Added
