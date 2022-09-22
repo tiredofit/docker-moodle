@@ -76,4 +76,15 @@ fi
 chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
 chmod -R 0755 "${NGINX_WEBROOT}"
 
+### Add alias for running occ
+cat >>/root/.bashrc <<EOF
+function moosh() {
+      export oldpwd="\$(pwd)"
+      cd /opt/moosh
+      sudo -u ${NGINX_USER} php moosh.php --moodle-path=${NGINX_WEBROOT} "\$@"
+      cd "\${oldpwd}"
+}
+EOF
+}
+
 liftoff

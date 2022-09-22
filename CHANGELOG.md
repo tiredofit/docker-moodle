@@ -1,3 +1,9 @@
+## 4.0.5 2022-09-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add alias for 'moosh' in console to automatically populate Moodle directory
+
+
 ## 4.0.4 2022-09-22 <dave at tiredofit dot ca>
 
    ### Changed

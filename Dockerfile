@@ -11,11 +11,12 @@ ENV MOODLE_VERSION=${MOODLE_VERSION:-"3.11"} \
 RUN set -x && \
     apk update && \
     apk upgrade && \
-    apk add -t .python3\
+    apk add -t .moodle-run-deps
                 aspell \
                 email \
                 git \
                 graphviz \
+                python3\
                 sassc \
                 texlive \
                 && \
