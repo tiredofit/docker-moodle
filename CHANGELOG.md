@@ -1,3 +1,9 @@
+## 4.0.4 2022-09-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Revert to PHP 7.4
+
+
 ## 4.0.3 2022-08-01 <dave at tiredofit dot ca>
 
    ### Changed
