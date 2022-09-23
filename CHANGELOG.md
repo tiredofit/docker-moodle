@@ -1,3 +1,9 @@
+## 4.0.10 2022-09-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix install for 4 character stable bases
+
+
 ## 4.0.9 2022-09-22 <dave at tiredofit dot ca>
 
    ### Changed

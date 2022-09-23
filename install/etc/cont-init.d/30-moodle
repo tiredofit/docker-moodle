@@ -23,7 +23,7 @@ if [ ! -f "${NGINX_WEBROOT}"/index.php ] ; then
     sanity_var SITE_SHORT_NAME "Site Short Name"
     mkdir -p "${NGINX_WEBROOT}"
 
-    MOODLE_VERSION_TMP=${MOODLE_VERSION:0:3}
+    MOODLE_VERSION_TMP=${MOODLE_VERSION:0:4}
     curl -sSL https://download.moodle.org/download.php/direct/stable${MOODLE_VERSION_TMP//./}/moodle-${MOODLE_VERSION}.tgz | tar xfz - --strip 1 -C "${NGINX_WEBROOT}"
     chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
     cd "${NGINX_WEBROOT}"/admin/cli
