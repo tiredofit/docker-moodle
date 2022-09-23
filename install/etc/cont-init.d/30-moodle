@@ -48,7 +48,7 @@ if [ ! -f "${NGINX_WEBROOT}"/index.php ] ; then
 
     if var_true "${ENABLE_REVERSE_PROXY}" ; then
         print_notice "Adding SSL Reverse Proxy Information"
-        sudo -u "${NGINX_USER}" sed -i "/wwwroot/a $CFG->sslproxy=1;" "${NGINX_WEBROOT}"/config.php
+        sudo -u "${NGINX_USER}" sed -i "/wwwroot/a \$CFG->sslproxy=1;" "${NGINX_WEBROOT}"/config.php
     fi
     chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
     chmod -R 0755 "${NGINX_WEBROOT}"

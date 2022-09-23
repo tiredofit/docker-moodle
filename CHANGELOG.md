@@ -1,3 +1,9 @@
+## 4.0.12 2022-09-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Introduce escaping environment variable for $
+
+
 ## 4.0.11 2022-09-23 <dave at tiredofit dot ca>
 
    ### Changed
