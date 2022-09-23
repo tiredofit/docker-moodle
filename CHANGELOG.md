@@ -1,3 +1,9 @@
+## 4.0.11 2022-09-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix changing permissiosn for data path if already created
+
+
 ## 4.0.10 2022-09-23 <dave at tiredofit dot ca>
 
    ### Changed

@@ -73,6 +73,7 @@ ${MOODLE_VERSION} upgraded on $(date)" "${DATA_PATH}"/.moodle-version
     fi
 fi
 
+chown "${NGINX_USER}":"${NGINX_GROUP}" "${DATA_PATH}"
 chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
 chmod -R 0755 "${NGINX_WEBROOT}"
 
