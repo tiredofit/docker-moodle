@@ -1,29 +1,35 @@
-FROM docker.io/tiredofit/nginx-php-fpm:7.4
-LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
+ARG PHP_BASE=7.4
+ARG DISTRO="alpine"
+
+FROM docker.io/tiredofit/nginx-php-fpm:${PHP_BASE}-${DISTRO}
+LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG MOODLE_VERSION
+
 ENV MOODLE_VERSION=${MOODLE_VERSION:-"3.11"} \
     NGINX_WEBROOT="/www/moodle" \
     NGINX_SITE_ENABLED="moodle" \
-    PHP_ENABKE_SOAP=TRUE \
+    PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
+    PHP_ENABLE_SOAP=TRUE \
     PHP_ENABLE_SODIUM=TRUE \
     PHP_ENABLE_XMLRPC=TRUE \
     PHP_ENABLE_ZIP=TRUE \
     IMAGE_NAME="tiredofit/moodle" \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-moodle"
 
-RUN set -x && \
-    apk update && \
-    apk upgrade && \
-    apk add -t .moodle-run-deps \
-                aspell \
-                email \
-                git \
-                graphviz \
-                python3\
-                sassc \
-                texlive \
-                && \
+RUN source /assets/functions/00-container && \
+    set -x && \
+    package update && \
+    package upgrade && \
+    package install .moodle-run-deps \
+                    aspell \
+                    email \
+                    git \
+                    graphviz \
+                    python3\
+                    sassc \
+                    texlive \
+                    && \
     \
     ## Install Moosh
     mkdir -p /opt/moosh && \
@@ -31,7 +37,8 @@ RUN set -x && \
     cd /opt/moosh && \
     composer install --ignore-platform-reqs && \
     ln -s moosh.php /usr/bin/moosh && \
-    rm -rf /usr/src/* /var/tmp/* /var/cache/apk/*
+    package cleanup && \
+    rm -rf /root/.composer \
+           /var/tmp/*
 
-### Configuration Setup
-ADD install /
+COPY install /

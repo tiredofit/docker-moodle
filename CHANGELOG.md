@@ -1,3 +1,9 @@
+## 4.1.0 2022-11-30 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Rework Dockerfile to solve installation issues and add optimizations
+
+
 ## 4.0.13 2022-10-05 <dave at tiredofit dot ca>
 
    ### Changed
