@@ -69,7 +69,7 @@ docker pull docker.io/tiredofdit/moodle:(imagetag)
 Builds of the image are also available on the [Github Container Registry](https://github.com/tiredofit/docker-moodle/pkgs/container/docker-moodle) 
  
 ```
-docker pull ghcr.io/tiredofit/docker-moodle/pkgs/container/docker-moodle):(imagetag)
+docker pull ghcr.io/tiredofit/docker-moodle:(imagetag)
 ``` 
 
 The following image tags are available along with their tagged release based on what's written in the [Changelog](CHANGELOG.md):
