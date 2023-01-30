@@ -1,7 +1,7 @@
 # github.com/tiredofit/docker-moodle
 
 [![GitHub release](https://img.shields.io/github/v/tag/tiredofit/docker-moodle?style=flat-square)](https://github.com/tiredofit/docker-moodle/releases/latest)
-[![Build Status](https://img.shields.io/github/workflow/status/tiredofit/docker-moodle/build?style=flat-square)](https://github.com/tiredofit/docker-moodle/actions?query=workflow%3Abuild)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/tiredofit/docker-moodle/main.yml?branch=main&style=flat-square)](https://github.com/tiredofit/docker-moodle/actions)
 [![Docker Stars](https://img.shields.io/docker/stars/tiredofit/moodle.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/moodle/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/moodle.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/moodle/)
 [![Become a sponsor](https://img.shields.io/badge/sponsor-tiredofit-181717.svg?logo=github&style=flat-square)](https://github.com/sponsors/tiredofit)
