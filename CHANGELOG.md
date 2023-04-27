@@ -1,3 +1,9 @@
+## 4.2.0 2023-04-26 <dave at tiredofit dot ca>
+
+   ### Added
+      - Introduce support for '_FILE' environment variables
+
+
 ## 4.1.0 2022-11-30 <dave at tiredofit dot ca>
 
    ### Changed

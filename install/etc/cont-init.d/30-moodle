@@ -13,6 +13,16 @@ if [ ! -d "${DATA_PATH}" ] ; then
     chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${DATA_PATH}"
 fi
 
+transform_file_var \
+                    ADMIN_EMAIL \
+                    ADMIN_PASS \
+                    ADMIN_USER \
+                    DB_HOST \
+                    DB_NAME \
+                    DB_PASS \
+                    DB_PORT \
+                    DB_USER
+
 if [ ! -f "${NGINX_WEBROOT}"/index.php ] ; then
     print_info "Detecting New Install. Downloading Moodle.."
     sanity_var ADMIN_USER "Administrative User"
