@@ -63,7 +63,7 @@ Clone this repository and build the image with `docker build <arguments> (imagen
 Builds of the image are available on [Docker Hub](https://hub.docker.com/r/tiredofit/moodle)
 
 ```bash
-docker pull docker.io/tiredofdit/moodle:(imagetag)
+docker pull docker.io/tiredofit/moodle:(imagetag)
 ```
 
 Builds of the image are also available on the [Github Container Registry](https://github.com/tiredofit/docker-moodle/pkgs/container/docker-moodle)
