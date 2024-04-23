@@ -1,3 +1,9 @@
+## 4.3.1 2024-04-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Rerelease of 4.3.0
+
+
 ## 4.3.0 2024-04-23 <dave at tiredofit dot ca>
 
    ### Added
