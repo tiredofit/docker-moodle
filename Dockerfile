@@ -1,4 +1,4 @@
-ARG PHP_BASE=7.4
+ARG PHP_BASE=8.2
 ARG DISTRO="alpine"
 
 FROM docker.io/tiredofit/nginx-php-fpm:${PHP_BASE}-${DISTRO}
@@ -6,7 +6,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG MOODLE_VERSION
 
-ENV MOODLE_VERSION=${MOODLE_VERSION:-"3.11"} \
+ENV MOODLE_VERSION=${MOODLE_VERSION:-"4.4"} \
     NGINX_WEBROOT="/www/moodle" \
     NGINX_SITE_ENABLED="moodle" \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
