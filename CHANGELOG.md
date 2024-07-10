@@ -1,3 +1,9 @@
+## 4.3.2 2024-07-09 <fermion2020@github>
+
+   ### Changed
+      - Update nginx configuration for better security
+
+
 ## 4.3.1 2024-04-23 <dave at tiredofit dot ca>
 
    ### Changed
