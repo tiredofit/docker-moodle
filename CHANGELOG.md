@@ -1,7 +1,14 @@
+## 4.4.0pre 2025-10-08 <code at nfrastack dot com>
+
+   ### Changed
+      - Switch to nfrastack/nginx-php-fpm
+      - MOODLE_VERSION non existence on first boot grabs latest git tag from repository
+      - ENABLE_AUTO_UPGRADE works if MOODLE_VERSION differs from original version
+      - Change variables and boot logic
+
 ## 4.3.99 2025-10-08 <dave at tiredofit dot ca>
 
 Add EOL Notice and deprecate image
-
 
 ## 4.3.2 2024-07-09 <fermion2020@github>
 
@@ -126,7 +133,7 @@ Add EOL Notice and deprecate image
 
 ## 3.5 2018-06-10 <dave at redacted>
 
-* Add Graphviz 
+* Add Graphviz
 * Add Aspell
 
 ## 3.41 2017-12-11 <dave at redacted>
@@ -155,7 +162,7 @@ Add EOL Notice and deprecate image
 
 * Rebase from nginx-php-fpm 5.6 with s6
 * Added email apk
-* 
+*
 
 ## 2.1 2017-04-12 <dave at redacted>
 

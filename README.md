@@ -1,191 +1,154 @@
-# github.com/tiredofit/docker-moodle
+# nfrastack/container-moodle
 
-[![GitHub release](https://img.shields.io/github/v/tag/tiredofit/docker-moodle?style=flat-square)](https://github.com/tiredofit/docker-moodle/releases/latest)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/tiredofit/docker-moodle/main.yml?branch=main&style=flat-square)](https://github.com/tiredofit/docker-moodle/actions)
-[![Docker Stars](https://img.shields.io/docker/stars/tiredofit/moodle.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/moodle/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/moodle.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/moodle/)
-[![Become a sponsor](https://img.shields.io/badge/sponsor-tiredofit-181717.svg?logo=github&style=flat-square)](https://github.com/sponsors/tiredofit)
-[![Paypal Donate](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square)](https://www.paypal.me/tiredofit)
 ## About
 
-This will build a Docker Image for [Moodle](https://www.moodle.org/), a learning management system.
-
-* Automatically download latest version of Moodle if not installed
-* Install Database
-* Includes [Moosh](https://www.github.com/tmuras/moosh/)
+This repository will build a container image for building [Moodle](https://www.moodle.org/). A Learning management System.
 
 ## Maintainer
 
-- [Dave Conroy](https://github.com/tiredofit/)
+* [Nfrastack](https://www.nfrastack.com)
 
 ## Table of Contents
 
-- [About](#about)
-- [Maintainer](#maintainer)
-- [Table of Contents](#table-of-contents)
-- [Prerequisites and Assumptions](#prerequisites-and-assumptions)
-- [Installation](#installation)
-  - [Build from Source](#build-from-source)
-  - [Prebuilt Images](#prebuilt-images)
-    - [Multi Architecture](#multi-architecture)
-- [Configuration](#configuration)
-  - [Quick Start](#quick-start)
-  - [Persistent Storage](#persistent-storage)
-  - [Environment Variables](#environment-variables)
-    - [Base Images used](#base-images-used)
-    - [Required Always](#required-always)
-    - [First Insall Only](#first-insall-only)
-  - [Networking](#networking)
-- [Maintenance](#maintenance)
-  - [Shell Access](#shell-access)
-- [Support](#support)
-  - [Usage](#usage)
-  - [Bugfixes](#bugfixes)
-  - [Feature Requests](#feature-requests)
-  - [Updates](#updates)
-- [License](#license)
-- [Maintenance](#maintenance-1)
-  - [Shell Access](#shell-access-1)
-- [References](#references)
-
-## Prerequisites and Assumptions
-*  Assumes you are using some sort of SSL terminating reverse proxy such as:
-   *  [Traefik](https://github.com/tiredofit/docker-traefik)
-   *  [Nginx](https://github.com/jc21/nginx-proxy-manager)
-   *  [Caddy](https://github.com/caddyserver/caddy)
+* [About](#about)
+* [Maintainer](#maintainer)
+* [Table of Contents](#table-of-contents)
+* [Installation](#installation)
+  * [Prebuilt Images](#prebuilt-images)
+  * [Quick Start](#quick-start)
+  * [Persistent Storage](#persistent-storage)
+* [Configuration](#configuration)
+  * [Environment Variables](#environment-variables)
+    * [Base Images used](#base-images-used)
+    * [Core Configuration](#core-configuration)
+  * [Users and Groups](#users-and-groups)
+  * [Networking](#networking)
+* [Maintenance](#maintenance)
+  * [Shell Access](#shell-access)
+* [Support & Maintenance](#support--maintenance)
+* [License](#license)
+* [References](#references)
 
 ## Installation
 
-### Build from Source
-Clone this repository and build the image with `docker build <arguments> (imagename) .`
-
 ### Prebuilt Images
-Builds of the image are available on [Docker Hub](https://hub.docker.com/r/tiredofit/moodle)
 
-```bash
-docker pull docker.io/tiredofit/moodle:(imagetag)
+Feature limited builds of the image are available on the [Github Container Registry](https://github.com/nfrastack/container-moodle/pkgs/container/container-moodle) and [Docker Hub](https://hub.docker.com/r/nfrastack/moodle).
+
+To unlock advanced features, one must provide a code to be able to change specific environment variables from defaults. Support the development to gain access to a code.
+
+To get access to the image use your container orchestrator to pull from the following locations:
+
+```
+ghcr.io/nfrastack/container-moodle:(image_tag)
+docker.io/nfrastack/moodle:(image_tag)
 ```
 
-Builds of the image are also available on the [Github Container Registry](https://github.com/tiredofit/docker-moodle/pkgs/container/docker-moodle)
+Image tag syntax is:
 
-```
-docker pull ghcr.io/tiredofit/docker-moodle:(imagetag)
-```
+`<image>:<optional tag>-<optional phpversion>`
 
-The following image tags are available along with their tagged release based on what's written in the [Changelog](CHANGELOG.md):
+Example:
 
-| PHP version | OS     | Tag       |
-| ----------- | ------ | --------- |
-| 8.0.x       | Alpine | `:latest` |
-#### Multi Architecture
-Images are built primarily for `amd64` architecture, and may also include builds for `arm/v7`, `arm64` and others. These variants are all unsupported. Consider [sponsoring](https://github.com/sponsors/tiredofit) my work so that I can work with various hardware. To see if this image supports multiple architecures, type `docker manifest (image):(tag)`
+`docker.io/nfrastack/container-moodle:latest` or
 
+`ghcr.io/nfrastack/container-moodle:1.0-php84`
 
-## Configuration
+* `latest` will be the most recent commit
+
+* An optional `tag` may exist that matches the [CHANGELOG](CHANGELOG.md) - These are the safest
+
+* There may be an optional `phpversion` if there are mutiple builds using different PHP interpreters you may use those
+Have a look at the container registries and see what tags are available.
+
+#### Multi-Architecture Support
+
+Images are built for `amd64` by default, with optional support for `arm64` and other architectures.
+
 ### Quick Start
 
-* The quickest way to get started is using [docker-compose](https://docs.docker.com/compose/). See the examples folder for a working [docker-compose.yml](examples/docker-compose.yml) that can be modified for development or production use.
+* The quickest way to get started is using [docker-compose](https://docs.docker.com/compose/). See the examples folder for a working [compose.yml](examples/compose.yml) that can be modified for your use.
 
+* Map [persistent storage](#persistent-storage) for access to configuration and data files for backup.
 * Set various [environment variables](#environment-variables) to understand the capabilities of this image.
-* Map [persistent storage](#data-volumes) for access to configuration and data files for backup.
 
 ### Persistent Storage
 
-The following directories are used for configuration and can be mapped for persistent storage.
+The following directories/files should be mapped for persistent storage in order to utilize the container effectively.
 
 | Directory     | Description                                                   |
 | ------------- | ------------------------------------------------------------- |
 | `/www/moodle` | Root moodle Directory                                         |
-| `/www/data`   | Course and other Moodle Data seperate from installation files |
-| `/www/logs`   | Nginx and php-fpm logfiles                                    |
+| `/data`       | Course and other Moodle Data seperate from installation files |
 
 ### Environment Variables
 
 #### Base Images used
 
-This image relies on an [Alpine Linux](https://hub.docker.com/r/tiredofit/alpine) base image that relies on an [init system](https://github.com/just-containers/s6-overlay) for added capabilities. Outgoing SMTP capabilities are handlded via `msmtp`. Individual container performance monitoring is performed by [zabbix-agent](https://zabbix.org). Additional tools include: `bash`,`curl`,`less`,`logrotate`,`nano`.
-
+This image relies on a customized base image in order to work.
 Be sure to view the following repositories to understand all the customizable options:
 
-| Image                                                         | Description                            |
-| ------------------------------------------------------------- | -------------------------------------- |
-| [OS Base](https://github.com/tiredofit/docker-alpine/)        | Customized Image based on Alpine Linux |
-| [Nginx](https://github.com/tiredofit/docker-nginx/)           | Nginx webserver                        |
-| [PHP-FPM](https://github.com/tiredofit/docker-nginx-php-fpm/) | PHP Interpreter                        |
+| Image                                                                 | Description         |
+| --------------------------------------------------------------------- | ------------------- |
+| [OS Base](https://github.com/nfrastack/container-base/)               | Base Image          |
+| [Nginx](https://github.com/nfrastack/container-nginx/)                | Nginx Webserver     |
+| [Nginx PHP-FPM](https://github.com/nfrastack/container-nginx-php-fpm) | PHP-FPM Interpreter |
 
-#### Required Always
-| Parameter     | Description                                                         | Default      | `_FILE` |
-| ------------- | ------------------------------------------------------------------- | ------------ | ------- |
-| `CRON_PERIOD` | Time in minutes to be required to perform inernal maintenance tasks | `15`         |         |
-| `DATA_PATH`   | Moodle Data and Course related files                                | `/www/data/` |         |
-| `DB_HOST`     | MariaDB external container hostname (e.g. moodle-db)                |              | x       |
-| `DB_NAME`     | MariaDB database name i.e. (e.g. moodle)                            |              | x       |
-| `DB_USER`     | MariaDB username for database (e.g. moodle)                         |              | x       |
-| `DB_PASS`     | MariaDB password for database (e.g. userpassword)                   |              | x       |
-| `DB_PORT`     | MariaDB Port                                                        | `3306`       | x       |
+Below is the complete list of available options that can be used to customize your installation.
 
-#### First Insall Only
-| Parameter              | Description                                                         | Default              | `_FILE` |
-| ---------------------- | ------------------------------------------------------------------- | -------------------- | ------- |
-| `MOODLE_VERSION`       | Used to choose what Moodle Installation to install or Upgrade to    | `Look in Dockerfile` |         |
-| `ADMIN_EMAIL`          | Email address for the Administrator                                 |                      | x       |
-| `ADMIN_USER`           | Username for the Administrator                                      |                      | x       |
-| `ADMIN_PASS`           | Password for the Administrator                                      |                      | x       |
-| `ENABLE_REVERSE_PROXY` | Tweak nginx to run behind a reverse proxy for URLs `TRUE` / `FALSE` | `TRUE`               |         |
-| `LANGUAGE`             | Site Lanaguage                                                      | `en`                 |         |
-| `SITE_PORT`            | What Port does moodle deliver assets to                             | `80`                 |         |
-| `SITE_NAME`            | The title of the Website                                            | ``                   |         |
-| `SITE_SHORT_NAME`      | The short name of site e.g. `example`                               | ``                   |         |
-| `SITE_URL`             | The Full site URL of the installation e.g. `moodle.example.com`     |                      |         |
+* Variables showing an 'x' under the `Advanced` column can only be set if the containers advanced functionality is enabled.
 
-### Networking
+### Required Always
 
-The following ports are exposed.
+| Parameter              | Description                                                         | Default  | `_FILE` |
+| ---------------------- | ------------------------------------------------------------------- | -------- | ------- |
+| `DATA_PATH`            | Moodle Data and Course related files                                | `/data/` |         |
+| `CRON_INTERVAL`        | Time in minutes to be required to perform inernal maintenance tasks | `1`      |         |
+| `ENABLE_REVERSE_PROXY` | Tweak nginx to run behind a reverse proxy for URLs `TRUE` / `FALSE` | `TRUE`   |         |
 
-| Port | Description |
-| ---- | ----------- |
-| `80` | HTTP        |
+#### First Insall Only or Upgrades
+
+| Parameter             | Description                                                                         | Default       | `_FILE` |
+| --------------------- | ----------------------------------------------------------------------------------- | ------------- | ------- |
+| `MOODLE_VERSION`      | Used to choose what Moodle Installation to install or Upgrade to                    | (most recent) |         |
+| `ENABLE_AUTO_UPGRADE` | `TRUE` / `FALSE` if you pass a different `MOODLE_VERSION` than originally installed |               |         |
+| `ADMIN_EMAIL`         | Email address for the Administrator                                                 |               | x       |
+| `ADMIN_USER`          | Username for the Administrator                                                      |               | x       |
+| `ADMIN_PASS`          | Password for the Administrator                                                      |               | x       |
+| `DB_HOST`             | MariaDB external container hostname (e.g. moodle-db)                                |               | x       |
+| `DB_NAME`             | MariaDB database name i.e. (e.g. moodle)                                            |               | x       |
+| `DB_USER`             | MariaDB username for database (e.g. moodle)                                         |               | x       |
+| `DB_PASS`             | MariaDB password for database (e.g. userpassword)                                   |               | x       |
+| `DB_PORT`             | MariaDB Port                                                                        | `3306`        | x       |
+| `LANGUAGE`            | Site Lanaguage                                                                      | `en`          |         |
+| `SITE_PORT`           | What Port does moodle deliver assets to                                             | `80`          |         |
+| `SITE_NAME`           | The title of the Website                                                            |               |         |
+| `SITE_SHORT_NAME`     | The short name of site e.g. `example`                                               |               |         |
+| `SITE_URL`            | The Full site URL of the installation                                               |               |         |
+|                       | e.g. `moodle.example.com`                                                           |               |         |
 
 * * *
+
 ## Maintenance
 
 ### Shell Access
 
-For debugging and maintenance purposes you may want access the containers shell.
+For debugging and maintenance, `bash` and `sh` are available in the container.
 
-```bash
-docker exec -it (whatever your container name is) bash
-```
+## Support & Maintenance
 
-## Support
-
-These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
-### Usage
-- The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
-- [Sponsor me](https://tiredofit.ca/sponsor) for personalized support
-### Bugfixes
-- Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
-
-### Feature Requests
-- Feel free to submit a feature request, however there is no guarantee that it will be added, or at what timeline.
-- [Sponsor me](https://tiredofit.ca/sponsor) regarding development of features.
-
-### Updates
-- Best effort to track upstream changes, More priority if I am actively using the image in a production environment.
-- [Sponsor me](https://tiredofit.ca/sponsor) for up to date releases.
-
-## License
-MIT. See [LICENSE](LICENSE) for more details.
-## Maintenance
-### Shell Access
-
-For debugging and maintenance purposes you may want access the containers shell.
-
-```bash
-docker exec -it (whatever your container name is e.g. moodle) bash
-```
+* For community help, tips, and community discussions, visit the [Discussions board](/discussions).
+* For personalized support or a support agreement, see [Nfrastack Support](https://nfrastack.com/).
+* To report bugs, submit a [Bug Report](issues/new). Usage questions will be closed as not-a-bug.
+* Feature requests are welcome, but not guaranteed. For prioritized development, consider a support agreement.
+* Updates are best-effort, with priority given to active production use and support agreements.
 
 ## References
 
 * https://www.moodle.org
 * https://www.github.com/tmuras/moosh/
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+

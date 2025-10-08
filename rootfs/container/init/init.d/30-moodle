@@ -1,0 +1,103 @@
+#!/usr/bin/with-contenv bash
+# SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
+#
+# SPDX-License-Identifier: MIT
+
+source /container/base/functions/container/init
+prepare_service 30-moodle
+SERVICE_NAME="moodle"
+
+transform_file_var \
+                    ADMIN_EMAIL \
+                    ADMIN_PASS \
+                    ADMIN_USER \
+                    DB_HOST \
+                    DB_NAME \
+                    DB_PASS \
+                    DB_PORT \
+                    DB_USER
+
+db_ready mariadb
+create_folder "${DATA_PATH}" "${NGINX_USER}" "${NGINX_GROUP}" 0755
+echo "*/${CRON_INTERVAL} * * * * TZ=\${TIMEZONE} php \${NGINX_WEBROOT}/admin/cli/cron.php >/dev/null 2>&1" | silent tee /container/cron/moodle_scheduled_tasks
+
+if [ ! -f "${NGINX_WEBROOT}"/index.php ] ; then
+    print_info "Detecting New Install. Downloading Moodle.."
+    sanity_var ADMIN_USER "Administrative User"
+    sanity_var ADMIN_EMAIL "Administrative Email"
+    sanity_var ADMIN_PASS "Administrative Password"
+    sanity_var SITE_URL "Site URL"
+    sanity_var SITE_NAME "Site Full Name"
+    sanity_var SITE_SHORT_NAME "Site Short Name"
+    create_folder "${NGINX_WEBROOT}" "${NGINX_USER}" "${NGINX_GROUP}" 0755
+
+    if [ -z "${MOODLE_VERSION}" ] || [ "${MOODLE_VERSION}" = "latest" ] || [ "${MOODLE_VERSION}" = "most recent" ] ; then
+        MOODLE_VERSION=$(git ls-remote --tags "${MOODLE_REPO_URL}" | cut -d/ -f3- | sort -V | tail -n1)
+        print_notice "No Moodle Version specified. Checking repository for most recent release"
+    fi
+
+    print_notice "Installing Moodle Version: ${MOODLE_VERSION}"
+    clone_git_repo "${MOODLE_REPO_URL}" "${MOODLE_VERSION}" /usr/src/moodle
+    cp -aR /usr/src/moodle/* "${NGINX_WEBROOT%/}"/
+    chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
+    cd "${NGINX_WEBROOT}"/admin/cli
+    print_info "Installing Moodle ${MOODLE_VERSION}"
+    sudo -u "${NGINX_USER}" TZ=${TIMEZONE} php install.php \
+                                                             --adminuser=${ADMIN_USER} \
+                                                             --adminemail=${ADMIN_EMAIL} \
+                                                             --adminpass=${ADMIN_PASS} \
+                                                             --agree-license \
+                                                             --dataroot=${DATA_PATH} \
+                                                             --dbhost=${DB_HOST} \
+                                                             --dbname=${DB_NAME} \
+                                                             --dbuser=${DB_USER} \
+                                                             --dbpass=${DB_PASS} \
+                                                             --dbport=${DB_PORT} \
+                                                             --dbtype=mariadb \
+                                                             --fullname="${SITE_NAME}" \
+                                                             --lang=${LANGUAGE} \
+                                                             --non-interactive \
+                                                             --shortname="${SITE_SHORT_NAME}" \
+                                                             --wwwroot=${SITE_URL}
+
+    if var_true "${ENABLE_REVERSE_PROXY}" ; then
+        print_notice "Adding SSL Reverse Proxy Information"
+        sudo -u "${NGINX_USER}" sed -i "/wwwroot/a \$CFG->sslproxy=1;" "${NGINX_WEBROOT%/}"/config.php
+    fi
+
+    if [ ! -f "${DATA_PATH%/}"/.moodle-version ]; then
+        echo "${MOODLE_VERSION} first installed on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')" | silent sudo -u "${NGINX_USER}" tee "${DATA_PATH%/}"/.moodle-version
+    fi
+
+    rm -rf /usr/src/moodle
+fi
+
+
+if var_true "${ENABLE_AUTO_UPDATE}" ; then
+    if [ -n "${MOODLE_VERSION}" ] && [ "${MOODLE_VERSION}" != "$(head -n 1 ${DATA_PATH}/.moodle-version | awk '{print $1}')" ] ; then
+        print_warn "Detected in place Moodle version $(head -n 1 ${DATA_PATH}/.moodle-version | awk '{print $1}') - Upgrading to ${MOODLE_VERSION}"
+        clone_git_repo "${MOODLE_REPO_URL}" "${MOODLE_VERSION}" /usr/src/moodle
+        cp -aR /usr/src/moodle/* "${NGINX_WEBROOT%/}"/
+        cd "${NGINX_WEBROOT}"/admin/cli
+        silent sudo -u "${NGINX_USER}" TZ=${TIMEZONE} php upgrade.php --non-interactive
+        UPGRADE=TRUE
+        sudo -u "${NGINX_USER}" sed -i --follow-symlinks "1 i\
+${MOODLE_VERSION} upgraded on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')" "${DATA_PATH%/}"/.moodle-version
+        rm -rf /usr/src/moodle
+    fi
+fi
+
+chown "${NGINX_USER}":"${NGINX_GROUP}" "${DATA_PATH}"
+chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}"
+chmod -R 0755 "${NGINX_WEBROOT}"
+
+cat << EOF | silent tee -a /root/.bashrc
+moosh() {
+      export oldpwd="\$(pwd)"
+      cd /opt/moosh
+      sudo -u ${NGINX_USER} php moosh.php --moodle-path=${NGINX_WEBROOT} "\$@"
+      cd "\${oldpwd}"
+}
+EOF
+
+liftoff
