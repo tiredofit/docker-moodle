@@ -1,3 +1,8 @@
+## 4.3.99 2025-10-08 <dave at tiredofit dot ca>
+
+Add EOL Notice and deprecate image
+
+
 ## 4.3.2 2024-07-09 <fermion2020@github>
 
    ### Changed
