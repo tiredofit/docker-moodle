@@ -7,7 +7,7 @@ source /container/base/functions/container/init
 prepare_service 30-moodle
 SERVICE_NAME="moodle"
 
-transform_file_var \
+transform_var file \
                     ADMIN_EMAIL \
                     ADMIN_PASS \
                     ADMIN_USER \
